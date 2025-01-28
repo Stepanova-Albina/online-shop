@@ -1,0 +1,22 @@
+services:
+  web:
+    image: nginx
+    ports:
+      - 80:80
+    volumes:
+      - /Users/aldar/projects/environment/docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - /Users/aldar/projects/environment:/var/www/html
+
+  php-fpm:
+    build: docker/php
+    volumes:
+      - /Users/aldar/projects/environment:/var/www/html
+
+  db:
+    image: postgres:13
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    ports:
+      - 5432:5432
