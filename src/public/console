@@ -2,7 +2,7 @@ CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     name varchar NOT NULL,
     email varchar NOT NULL UNIQUE,
-    password NOT NULL
+    password varchar NOT NULL
 )
 
 CREATE TABLE products (
@@ -12,3 +12,15 @@ CREATE TABLE products (
     price decimal NOT NULL,
     image_url varchar
 )
+
+ALTER TABLE users ADD COLUMN photo varchar
+
+CREATE TABLE user_products (
+    id SERIAL PRIMARY KEY,
+    user_id int REFERENCES users (id) NOT NULL ,
+    product_id int REFERENCES products (id) NOT NULL ,
+    amount int NOT NULL
+)
+
+ALTER TABLE user_products ADD UNIQUE (user_id);
+ALTER TABLE user_products ADD UNIQUE (product_id);

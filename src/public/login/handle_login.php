@@ -29,11 +29,11 @@ if (empty($errors)) {
         if (password_verify($password, $passwordDb)) {
             session_start();
             $_SESSION['user_id'] = $user['id'];
-            header('Location: catalog.php');
+            header('Location:/catalog');
         } else {
             $errors['username'] = 'Email или пароль указаны неверно';
         }
     }
 }
 
-require_once './login_form.php';
+require_once './login/login_form.php';

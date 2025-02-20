@@ -1,27 +1,51 @@
+<div class="container signin">
+    <p><a href="/profile">МОЙ ПРОФИЛЬ</a></p>
+</div>
+<div class="container signin">
+    <p><a href="/catalog">КАТАЛОГ</a></p>
+</div>
 <div class="container">
-    <h3>Catalog</h3>
+    <h3>Корзина</h3>
     <div class="card-deck">
         <?php foreach ($products as $product): ?>
             <div class="card text-center">
                 <a href="#">
-                    <div class="card-header">
-                        Hit!
-                    </div>
                     <img class="card-img-top" src="<?php echo $product['image_url'];?>" alt="Card image">
                     <div class="card-body">
                         <p class="card-text text-muted"><?php echo $product['name'];?></p>
                         <a href="#"><h5 class="card-title"><?php echo $product['description'];?></h5></a>
                         <div class="card-footer">
-                            <?php echo $product['price'];?>
+                            Стоимость: <?php echo $product['price'];?>
                         </div>
                     </div>
                 </a>
             </div>
+            <form action="/add-product" method="POST">
+                <div class="container">
+
+                    <input type="hidden" placeholder="Enter Product-id" name="product_id" value="<?php echo $product['id'];?>" id="product_id" required>
+
+                    <label for="amount"><b>Количество: <?php echo $product['amount'];?></b></label>
+
+                    <hr>
+
+                </div>
+
+                <div class="container signin">
+                </div>
+            </form>
         <?php endforeach; ?>
     </div>
 </div>
 
 <style>
+    a {
+        color: #04AA6D;
+    }
+    .signin {
+        background-color: #f1f1f1;
+        text-align: left;
+    }
     body {
         font-style: sans-serif;
     }
@@ -36,6 +60,11 @@
 
     h3 {
         line-height: 3em;
+    }
+    .card-img-top {
+        width: 250px;
+        height: 350px;
+        object-fit: cover;
     }
 
     .card {
@@ -62,4 +91,9 @@
         font-size: 18px;
         background-color: white;
     }
+    .registerbtn {
+        background-color: #04AA6D;
+        color: white;
+    }
+
 </style>

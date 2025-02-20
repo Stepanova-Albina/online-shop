@@ -1,4 +1,4 @@
-<form action="handle_registration_form.php" method="POST">
+<form action="/registration" method="POST">
     <div class="container">
         <h1>Регистрация</h1>
         <p>Пожалуйста, заполните эту форму, чтобы создать учетную запись.</p>
@@ -34,7 +34,7 @@
     </div>
 
     <div class="container signin">
-        <p>У вас уже есть аккаунт? <a href="login_form.php">Войти</a>.</p>
+        <p>У вас уже есть аккаунт? <a href="../login">Войти</a>.</p>
     </div>
 </form>
 

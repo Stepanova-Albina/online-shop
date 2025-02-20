@@ -1,7 +1,7 @@
-<form action="handle_login.php" method="POST">
+<form action="/login" method="POST">
     <div class="container">
         <h1>Добро пожаловать</h1>
-        <p>Пожалуйста, заполните эту форму, чтобы войти в свою учетную запись.</p>
+        <p>Пожалуйста, заполните эту форму, чтобы войти.</p>
         <hr>
 
         <label for="email"><b>Email</b></label>
@@ -25,6 +25,9 @@
 
 
         <button type="submit" class="registerbtn">Войти</button>
+    </div>
+    <div class="container signin">
+        <p>У вас нет аккаунта? <a href="/registration">Зарегистрироваться</a>.</p>
     </div>
 
 </form>
