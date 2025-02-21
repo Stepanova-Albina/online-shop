@@ -1,11 +1,12 @@
 <?php
 
-class Product
+class ProductController
 {
     public function getCatalog()
     {
-        require_once './pages/catalog.php';
+        require_once '../Views/catalog.php';
     }
+
     public function addProduct()
     {
         if (session_status() !== PHP_SESSION_ACTIVE) {
@@ -19,7 +20,7 @@ class Product
 
         $errors = $this->validateAddProduct($_POST);
 
-        if(empty($errors)) {
+        if (empty($errors)) {
             $pdo = new PDO('pgsql:host=db;port=5432;dbname=mydb', 'user', 'pwd');
             $userId = $_SESSION['user_id'];
             $productId = $_POST['product_id'];
@@ -39,13 +40,14 @@ class Product
                 echo 'Количество продуктов увеличено';
             }
         }
-        require_once './pages/catalog.php';
+        require_once '../Views/catalog.php';
     }
-    private function validateAddProduct (array $data): array
+
+    private function validateAddProduct(array $data): array
     {
         $errors = [];
         if (isset($data['product_id'])) {
-            $productId = (int) $data['product_id'];
+            $productId = (int)$data['product_id'];
 
             $pdo = new PDO('pgsql:host=db;port=5432;dbname=mydb', 'user', 'pwd');
             $stmt = $pdo->prepare("SELECT * FROM products WHERE id = :product_id");

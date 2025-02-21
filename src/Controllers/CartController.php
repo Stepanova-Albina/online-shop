@@ -1,5 +1,6 @@
 <?php
-class Cart
+
+class CartController
 {
     public function getCart()
     {
@@ -14,7 +15,7 @@ class Cart
         $userId = $_SESSION['user_id'];
 
         $pdo = new PDO('pgsql:host=db;port=5432;dbname=mydb', 'user', 'pwd');
-        $stmtUserProducts= $pdo->query("SELECT * FROM user_products WHERE user_id = $userId");
+        $stmtUserProducts = $pdo->query("SELECT * FROM user_products WHERE user_id = $userId");
         $userProducts = $stmtUserProducts->fetchAll();
 
         $count = 0;
@@ -26,7 +27,7 @@ class Cart
             $products[$count]['amount'] = $userProduct['amount'];
             $count++;
         }
-        require_once './pages/cart_page.php';
+        require_once '../Views/cart.php';
 
     }
 }

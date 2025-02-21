@@ -3,8 +3,8 @@
 $requestUri = $_SERVER['REQUEST_URI'];
 $requestMethod = $_SERVER['REQUEST_METHOD'];
 
-require_once './classes/User.php';
-$user = new User();
+require_once '../Controllers/UserController.php';
+$user = new UserController();
 if ($requestUri === '/registration') {
     if ($requestMethod === 'GET') {
         $user->getRegistrate();
@@ -22,8 +22,8 @@ if ($requestUri === '/registration') {
         echo "$requestMethod для адреса $requestUri не поддерживается";
     }
 } elseif ($requestUri === '/catalog') {
-    require_once './classes/Product.php';
-    $product = new Product();
+    require_once '../Controllers/ProductController.php';
+    $product = new ProductController();
     if ($requestMethod === 'GET') {
         $product->getCatalog();
     } elseif ($requestMethod === 'POST') {
@@ -43,8 +43,8 @@ if ($requestUri === '/registration') {
     }
 }
 elseif ($requestUri === '/cart') {
-    require_once './classes/Cart.php';
-    $cart = new Cart();
+    require_once '../Controllers/CartController.php';
+    $cart = new CartController();
     $cart->getCart();
 }
 else {

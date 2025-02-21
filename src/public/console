@@ -24,3 +24,5 @@ CREATE TABLE user_products (
 
 ALTER TABLE user_products ADD UNIQUE (user_id);
 ALTER TABLE user_products ADD UNIQUE (product_id);
+
+CREATE UNIQUE INDEX ON user_products (user_id, product_id);

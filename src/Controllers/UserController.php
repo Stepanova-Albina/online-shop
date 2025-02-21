@@ -1,17 +1,12 @@
 <?php
 
-class User
+class UserController
 {
     public function getRegistrate()
     {
-        if (session_status() !== PHP_SESSION_ACTIVE) {
-            session_start();
-        }
-        if (!isset($_SESSION['user_id'])) {
-            header('location: /catalog');
-        }
-        require_once './pages/registration_form.php';
+        require_once '../Views/registration.php';
     }
+
     public function registrate()
     {
         $errors = $this->validateRegistrate($_POST);
@@ -27,16 +22,16 @@ class User
             $stmt = $pdo->prepare("INSERT INTO users (name, email, password) VALUES (:name, :email, :password)");
             $stmt->execute(['name' => $name, 'email' => $email, 'password' => $password]);
 
-            $statement = $pdo->prepare( "SELECT * FROM users WHERE email = :email");
+            $statement = $pdo->prepare("SELECT * FROM users WHERE email = :email");
             $statement->execute(['email' => $email]);
             $data = $statement->fetch();
             print_r($data);
         }
 
-        require_once './pages/registration_form.php';
+        require_once '../Views/registration.php';
     }
 
-    private function validateRegistrate(array $data) : array
+    private function validateRegistrate(array $data): array
     {
         $errors = [];
 
@@ -90,8 +85,9 @@ class User
 
     public function getLogin()
     {
-        require_once './pages/login_form.php';
+        require_once '../Views/login.php';
     }
+
     public function login()
     {
         $errors = $this->validateLogin($_POST);
@@ -117,9 +113,10 @@ class User
                 }
             }
         }
-        require_once './pages/login_form.php';
+        require_once '../Views/login.php';
     }
-    private function validateLogin(array $data) : array
+
+    private function validateLogin(array $data): array
     {
         $errors = [];
         if (!isset($data['email'])) {
@@ -145,13 +142,14 @@ class User
         $stmt = $pdo->query("SELECT * FROM users WHERE id = $userId");
         $user = $stmt->fetch();
 
-        require_once './pages/profile_page.php';
+        require_once '../Views/profile.php';
     }
 
     public function getProfileEdit()
     {
-        require_once './pages/profile_edit.php';
+        require_once '../Views/profile_edit.php';
     }
+
     public function profileEdit()
     {
         if (session_status() !== PHP_SESSION_ACTIVE) {
@@ -191,9 +189,10 @@ class User
             header('Location: /profile');
             exit;
         }
-        require_once './pages/profile_edit.php';
+        require_once '../Views/profile_edit.php';
     }
-    private function validateProfileEdit(array $data) : array
+
+    private function validateProfileEdit(array $data): array
     {
         $errors = [];
         if (isset($data['name'])) {
@@ -213,7 +212,7 @@ class User
                 $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :email");
                 $stmt->execute([':email' => $email]);
                 $user = $stmt->fetch();
-                if($user) {
+                if ($user) {
                     $userId = $_SESSION['user_id'];
                     if ($userId !== $user['id']) {
                         $errors['email'] = 'Такой Email уже существует';
