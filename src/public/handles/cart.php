@@ -22,5 +22,5 @@ foreach ($userProducts as $userProduct) {
     $products[$count]['amount'] = $userProduct['amount'];
     $count++;
 }
-require_once './cart/cart_page.php';
+require_once './pages/cart_page.php';
 

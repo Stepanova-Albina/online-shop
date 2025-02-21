@@ -7,6 +7,7 @@
 <div class="container">
     <h3>Корзина</h3>
     <div class="card-deck">
+        <?php if (isset($products)): ?>
         <?php foreach ($products as $product): ?>
             <div class="card text-center">
                 <a href="#">
@@ -20,6 +21,7 @@
                     </div>
                 </a>
             </div>
+
             <form action="/add-product" method="POST">
                 <div class="container">
 
@@ -37,7 +39,7 @@
         <?php endforeach; ?>
     </div>
 </div>
-
+<?php endif;?>
 <style>
     a {
         color: #04AA6D;

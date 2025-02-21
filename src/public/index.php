@@ -3,43 +3,49 @@
 $requestUri = $_SERVER['REQUEST_URI'];
 $requestMethod = $_SERVER['REQUEST_METHOD'];
 
+require_once './classes/User.php';
+$user = new User();
 if ($requestUri === '/registration') {
     if ($requestMethod === 'GET') {
-        require_once './registration/registration_form.php';
+        $user->getRegistrate();
     } elseif ($requestMethod === 'POST') {
-        require_once './registration/handle_registration_form.php';
+        $user->registrate();
     } else {
         echo "$requestMethod для адреса $requestUri не поддерживается";
     }
 } elseif ($requestUri === '/login') {
     if ($requestMethod === 'GET') {
-        require_once './login/login_form.php';
+        $user->getLogin();
     } elseif ($requestMethod === 'POST') {
-        require_once './login/handle_login.php';
+        $user->login();
     } else {
         echo "$requestMethod для адреса $requestUri не поддерживается";
     }
 } elseif ($requestUri === '/catalog') {
+    require_once './classes/Product.php';
+    $product = new Product();
     if ($requestMethod === 'GET') {
-        require_once './catalog/catalog.php';
+        $product->getCatalog();
     } elseif ($requestMethod === 'POST') {
-        require_once './catalog/handle_catalog.php';
+        $product->addProduct();
     } else {
         echo "$requestMethod для адреса $requestUri не поддерживается";
     }
 } elseif ($requestUri === '/profile') {
-    require_once './profile/handle_profile_page.php';
+    $user->getProfile();
 } elseif ($requestUri === '/profile-edit') {
     if ($requestMethod === 'GET') {
-        require_once './profileEdit/profile_edit.php';
+        $user->getProfileEdit();
     } elseif ($requestMethod === 'POST') {
-        require_once './profileEdit/handle_profile_edit.php';
+        $user->profileEdit();
     } else {
         echo "$requestMethod для адреса $requestUri не поддерживается";
     }
 }
 elseif ($requestUri === '/cart') {
-    require_once './cart/cart.php';
+    require_once './classes/Cart.php';
+    $cart = new Cart();
+    $cart->getCart();
 }
 else {
     http_response_code(404);
