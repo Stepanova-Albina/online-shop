@@ -1,5 +1,8 @@
 <html>
 <div class="wrapper">
+    <div class="top-right">
+        <p><a href="/logout">ВЫЙТИ</a></p>
+    </div>
     <div class="profile">
         <div class="content">
             <h1>Мой профиль</h1>
@@ -61,8 +64,10 @@
 </html>
 
 <style>
+
     @import url(https://fonts.googleapis.com/css?family=Lato:100,300,400,700);
     @import url(https://fonts.googleapis.com/css?family=Montez);
+
 
     body{
         background-color: #f5f5f5;
@@ -411,6 +416,7 @@
 
 
 
+
     /*Media Queries
     =========================*/
     @media only screen and (min-width: 768px){ /*Desktop*/
@@ -442,6 +448,11 @@
             width: 90%;
         }
     }
-
+    .top-right {
+        background-color: #f1f1f1;
+        text-align: right;
+        a {
+            color: #04AA6D;
+        }
 
 </style>

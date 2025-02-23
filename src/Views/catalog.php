@@ -18,6 +18,10 @@ $products = $stmt->fetchAll();
 <div class="container signin">
     <p><a href="/profile">МОЙ ПРОФИЛЬ</a></p>
 </div>
+<div class="top-right">
+    <p><a href="/logout">ВЫЙТИ</a></p>
+</div>
+
 <div class="container signin">
     <p><a href="/cart">МОЯ КОРЗИНА</a></p>
 </div>
@@ -46,7 +50,7 @@ $products = $stmt->fetchAll();
                     <?php if (isset($errors['amount'])): ?>
                         <label style="color: red"><?php echo $errors['amount']; ?></label>
                     <?php endif; ?>
-                    <input type="text" placeholder="Enter Amount" name="amount" id="amount" required>
+                    <input type="text" placeholder="Enter Amount" name="amount" id="amount">
 
                     <button type="submit" class="registerbtn">Добавить продукт</button>
                 </div>
@@ -69,6 +73,12 @@ $products = $stmt->fetchAll();
         background-color: #f1f1f1;
         text-align: left;
     }
+    .top-right {
+        background-color: #f1f1f1;
+        text-align: right;
+
+    }
+
     body {
         font-style: sans-serif;
     }

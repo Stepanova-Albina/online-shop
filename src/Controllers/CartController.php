@@ -1,5 +1,7 @@
 <?php
 
+require_once '../Model/Cart.php';
+require_once '../Model/Product.php';
 class CartController
 {
     public function getCart()
@@ -14,16 +16,18 @@ class CartController
 
         $userId = $_SESSION['user_id'];
 
-        $pdo = new PDO('pgsql:host=db;port=5432;dbname=mydb', 'user', 'pwd');
-        $stmtUserProducts = $pdo->query("SELECT * FROM user_products WHERE user_id = $userId");
-        $userProducts = $stmtUserProducts->fetchAll();
+
+        $cartModel = new Cart();
+        $userProducts = $cartModel->getAll($userId);
 
         $count = 0;
         foreach ($userProducts as $userProduct) {
             $productId = $userProduct['product_id'];
 
-            $stmtProducts = $pdo->query("SELECT * FROM products WHERE id = $productId");
-            $products[$count] = $stmtProducts->fetch();
+
+            $productModel = new Product();
+
+            $products[$count] = $productModel->getById($productId);
             $products[$count]['amount'] = $userProduct['amount'];
             $count++;
         }

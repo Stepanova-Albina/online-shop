@@ -1,6 +1,9 @@
 <div class="container signin">
     <p><a href="/profile">МОЙ ПРОФИЛЬ</a></p>
 </div>
+<div class="top-right">
+    <p><a href="/logout">ВЫЙТИ</a></p>
+</div>
 <div class="container signin">
     <p><a href="/catalog">КАТАЛОГ</a></p>
 </div>
@@ -47,6 +50,11 @@
     .signin {
         background-color: #f1f1f1;
         text-align: left;
+    }
+    .top-right {
+        background-color: #f1f1f1;
+        text-align: right;
+
     }
     body {
         font-style: sans-serif;

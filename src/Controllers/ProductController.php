@@ -1,5 +1,7 @@
 <?php
 
+require_once '../Model/Cart.php';
+require_once '../Model/Product.php';
 class ProductController
 {
     public function getCatalog()
@@ -21,22 +23,19 @@ class ProductController
         $errors = $this->validateAddProduct($_POST);
 
         if (empty($errors)) {
-            $pdo = new PDO('pgsql:host=db;port=5432;dbname=mydb', 'user', 'pwd');
             $userId = $_SESSION['user_id'];
             $productId = $_POST['product_id'];
             $amount = $_POST['amount'];
 
-            $stmt = $pdo->prepare("SELECT * FROM user_products WHERE product_id = :product_id AND user_id = :user_id");
-            $stmt->execute(['product_id' => $productId, 'user_id' => $userId]);
-            $product = $stmt->fetch();
+
+            $cartModel = new Cart();
+            $product = $cartModel->getProductById($productId, $userId);
             if ($product === false) {
-                $stmt = $pdo->prepare("INSERT INTO user_products (user_id, product_id, amount) VALUES (:user_id, :product_id, :amount)");
-                $stmt->execute(['user_id' => $userId, 'product_id' => $productId, 'amount' => $amount]);
+                $cartModel->insertAll($userId, $productId, $amount);
                 echo 'Продукт добавлен в корзину';
             } else {
                 $amount = $product['amount'] + $amount;
-                $stmt = $pdo->prepare("UPDATE user_products SET amount = :amount WHERE product_id = :product_id AND user_id = :user_id");
-                $stmt->execute(['amount' => $amount, 'product_id' => $productId, 'user_id' => $userId]);
+                $cartModel->updateAmount($amount, $productId, $userId);
                 echo 'Количество продуктов увеличено';
             }
         }
@@ -49,10 +48,9 @@ class ProductController
         if (isset($data['product_id'])) {
             $productId = (int)$data['product_id'];
 
-            $pdo = new PDO('pgsql:host=db;port=5432;dbname=mydb', 'user', 'pwd');
-            $stmt = $pdo->prepare("SELECT * FROM products WHERE id = :product_id");
-            $stmt->execute(['product_id' => $productId]);
-            $product = $stmt->fetch();
+
+            $productModel = new Product();
+            $product = $productModel->getById($productId);
 
             if ($product === false) {
                 $errors['product_id'] = 'Продукт не найден';
@@ -60,7 +58,7 @@ class ProductController
         } else {
             $errors['product_id'] = 'Идентификатор продукта не заполнен';
         }
-        if (isset($data['amount'])) {
+        if (!empty($data['amount'])) {
             $amount = (int)$data['amount'];
 
             if ($amount < 0 || $amount > 100) {

@@ -1,5 +1,6 @@
 <?php
 
+require_once '../Model/User.php';
 class UserController
 {
     public function getRegistrate()
@@ -12,20 +13,20 @@ class UserController
         $errors = $this->validateRegistrate($_POST);
 
         if (empty($errors)) {
-            $pdo = new PDO('pgsql:host=db;port=5432;dbname=mydb', 'user', 'pwd');
             $name = $_POST['name'];
             $email = $_POST['email'];
             $password = $_POST['psw'];
             $passwordRep = $_POST['psw-repeat'];
             $password = password_hash($password, PASSWORD_DEFAULT);
 
-            $stmt = $pdo->prepare("INSERT INTO users (name, email, password) VALUES (:name, :email, :password)");
-            $stmt->execute(['name' => $name, 'email' => $email, 'password' => $password]);
 
-            $statement = $pdo->prepare("SELECT * FROM users WHERE email = :email");
-            $statement->execute(['email' => $email]);
-            $data = $statement->fetch();
-            print_r($data);
+            $userModel = new User();
+
+            $userModel->insertAll($name, $email, $password);
+
+            $result = $userModel->getByEmail($email);
+
+            print_r($result);
         }
 
         require_once '../Views/registration.php';
@@ -51,11 +52,9 @@ class UserController
             } elseif (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
                 $errors['email'] = 'Email некорректный';
             } else {
-                $pdo = new PDO('pgsql:host=db;port=5432;dbname=mydb', 'user', 'pwd');
-                $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :email");
-                $stmt->execute(['email' => $email]);
-                $quantityEmail = $stmt->fetch();
-                if ($quantityEmail > 0) {
+                $userModel = new User();
+                $user = $userModel->getByEmail($email);
+                if ($user !== false) {
                     $errors['email'] = 'Такой Email уже существует';
                 }
             }
@@ -96,10 +95,8 @@ class UserController
             $email = $_POST['email'];
             $password = $_POST['psw'];
 
-            $pdo = new PDO('pgsql:host=db;port=5432;dbname=mydb', 'user', 'pwd');
-            $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :email");
-            $stmt->execute(['email' => $email]);
-            $user = $stmt->fetch();
+            $userModel = new User();
+            $user = $userModel->getByEmail($email);
             if ($user === false) {
                 $errors['username'] = 'Email или пароль указаны неверно';
             } else {
@@ -138,9 +135,8 @@ class UserController
         }
         $userId = $_SESSION['user_id'];
 
-        $pdo = new PDO('pgsql:host=db;port=5432;dbname=mydb', 'user', 'pwd');
-        $stmt = $pdo->query("SELECT * FROM users WHERE id = $userId");
-        $user = $stmt->fetch();
+        $userModel = new User();
+        $user = $userModel->getById($userId);
 
         require_once '../Views/profile.php';
     }
@@ -167,24 +163,20 @@ class UserController
             $email = $_POST['email'];
             $userId = $_SESSION['user_id'];
 
-            $pdo = new PDO('pgsql:host=db;port=5432;dbname=mydb', 'user', 'pwd');
-            $stmt = $pdo->query("SELECT * FROM users WHERE id = $userId");
-            $user = $stmt->fetch();
+            $userModel = new User();
+            $user = $userModel->getById($userId);
 
             if ($user['name'] !== $name) {
-                $stmt = $pdo->prepare("UPDATE users SET name = :name WHERE id = $userId");
-                $stmt->execute(['name' => $name]);
+                $userModel->updateNameById($name, $userId);
             }
 
             if ($user['email'] !== $email) {
-                $stmt = $pdo->prepare("UPDATE users SET email = :email WHERE id = $userId");
-                $stmt->execute(['email' => $email]);
+                $userModel->updateEmailById($email, $userId);
             }
 
             if (!empty($_POST['psw'])) {
                 $password = password_hash($_POST['psw'], PASSWORD_DEFAULT);
-                $stmt = $pdo->prepare("UPDATE users SET password = :password WHERE id = $userId");
-                $stmt->execute(['password' => $password]);
+                $userModel->updatePasswordById($password, $userId);
             }
             header('Location: /profile');
             exit;
@@ -208,10 +200,8 @@ class UserController
             } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 $errors['email'] = 'Email некорректный';
             } else {
-                $pdo = new PDO('pgsql:host=db;port=5432;dbname=mydb', 'user', 'pwd');
-                $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :email");
-                $stmt->execute([':email' => $email]);
-                $user = $stmt->fetch();
+                $userModel = new User();
+                $user = $userModel->getByEmail($email);
                 if ($user) {
                     $userId = $_SESSION['user_id'];
                     if ($userId !== $user['id']) {
@@ -233,5 +223,14 @@ class UserController
             }
         }
         return $errors;
+    }
+
+    public function logout()
+    {
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
+        }
+        session_destroy();
+        header('Location: /login');
     }
 }
