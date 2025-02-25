@@ -1,6 +1,5 @@
 <?php
-
-require_once '../Model/Model.php';
+namespace Model;
 class Cart extends Model
 {
     public function getProductById(int $productId, int $userId): array|false

@@ -1,8 +1,15 @@
 <?php
+namespace Controller;
 
-require_once '../Model/User.php';
+use Model\User;
 class UserController
 {
+    private User $userModel;
+
+    public function __construct()
+    {
+        $this->userModel = new User();
+    }
     public function getRegistrate()
     {
         require_once '../Views/registration.php';
@@ -19,12 +26,9 @@ class UserController
             $passwordRep = $_POST['psw-repeat'];
             $password = password_hash($password, PASSWORD_DEFAULT);
 
+            $this->userModel->insertAll($name, $email, $password);
 
-            $userModel = new User();
-
-            $userModel->insertAll($name, $email, $password);
-
-            $result = $userModel->getByEmail($email);
+            $result = $this->userModel->getByEmail($email);
 
             print_r($result);
         }
@@ -52,8 +56,7 @@ class UserController
             } elseif (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
                 $errors['email'] = 'Email некорректный';
             } else {
-                $userModel = new User();
-                $user = $userModel->getByEmail($email);
+                $user = $this->userModel->getByEmail($email);
                 if ($user !== false) {
                     $errors['email'] = 'Такой Email уже существует';
                 }
@@ -95,8 +98,7 @@ class UserController
             $email = $_POST['email'];
             $password = $_POST['psw'];
 
-            $userModel = new User();
-            $user = $userModel->getByEmail($email);
+            $user = $this->userModel->getByEmail($email);
             if ($user === false) {
                 $errors['username'] = 'Email или пароль указаны неверно';
             } else {
@@ -135,8 +137,7 @@ class UserController
         }
         $userId = $_SESSION['user_id'];
 
-        $userModel = new User();
-        $user = $userModel->getById($userId);
+        $user = $this->userModel->getById($userId);
 
         require_once '../Views/profile.php';
     }
@@ -163,20 +164,19 @@ class UserController
             $email = $_POST['email'];
             $userId = $_SESSION['user_id'];
 
-            $userModel = new User();
-            $user = $userModel->getById($userId);
+            $user = $this->userModel->getById($userId);
 
             if ($user['name'] !== $name) {
-                $userModel->updateNameById($name, $userId);
+                $this->userModel->updateNameById($name, $userId);
             }
 
             if ($user['email'] !== $email) {
-                $userModel->updateEmailById($email, $userId);
+                $this->userModel->updateEmailById($email, $userId);
             }
 
             if (!empty($_POST['psw'])) {
                 $password = password_hash($_POST['psw'], PASSWORD_DEFAULT);
-                $userModel->updatePasswordById($password, $userId);
+                $this->userModel->updatePasswordById($password, $userId);
             }
             header('Location: /profile');
             exit;
@@ -200,8 +200,7 @@ class UserController
             } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 $errors['email'] = 'Email некорректный';
             } else {
-                $userModel = new User();
-                $user = $userModel->getByEmail($email);
+                $user = $this->userModel->getByEmail($email);
                 if ($user) {
                     $userId = $_SESSION['user_id'];
                     if ($userId !== $user['id']) {

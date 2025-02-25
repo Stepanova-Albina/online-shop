@@ -1,63 +1,67 @@
 <?php
+namespace Core;
 
+use Controller\UserController;
+use Controller\ProductController;
+use Controller\CartController;
 class App
 {
     private array $routes = [
         '/registration' => [
             'GET' => [
-                'class' => 'UserController',
+                'class' => UserController::class,
                 'method' => 'getRegistrate'
             ],
             'POST' => [
-                'class' => 'UserController',
+                'class' => UserController::class,
                 'method' => 'registrate'
             ]
         ],
         '/login' => [
             'GET' => [
-                'class' => 'UserController',
+                'class' => UserController::class,
                 'method' => 'getLogin'
             ],
             'POST' => [
-                'class' => 'UserController',
+                'class' => UserController::class,
                 'method' => 'login'
             ]
         ],
         '/catalog' => [
             'GET' => [
-                'class' => 'ProductController',
+                'class' => ProductController::class,
                 'method' => 'getCatalog'
             ],
             'POST' => [
-                'class' => 'ProductController',
+                'class' => ProductController::class,
                 'method' => 'addProduct'
             ]
         ],
         '/profile' => [
             'GET' => [
-                'class' => 'UserController',
+                'class' => UserController::class,
                 'method' => 'getProfile'
             ]
         ],
         '/profile-edit' => [
             'GET' => [
-                'class' => 'UserController',
+                'class' => UserController::class,
                 'method' => 'getProfileEdit'
             ],
             'POST' => [
-                'class' => 'UserController',
+                'class' => UserController::class,
                 'method' => 'profileEdit'
             ]
         ],
         '/cart' => [
             'GET' => [
-                'class' => 'CartController',
+                'class' => CartController::class,
                 'method' => 'getCart'
             ]
         ],
         '/logout' => [
             'GET' => [
-                'class' => 'UserController',
+                'class' =>UserController::class,
                 'method' => 'logout'
                 ]
             ]
@@ -75,7 +79,6 @@ class App
                 $class = $handler['class'];
                 $method = $handler['method'];
 
-                require_once "../Controllers/$class.php";
                 $controller = new $class();
                 $controller->$method();
             } else {

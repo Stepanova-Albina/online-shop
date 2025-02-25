@@ -1,7 +1,9 @@
 <?php
+namespace Controller;
 
-require_once '../Model/Cart.php';
-require_once '../Model/Product.php';
+use Model\Cart;
+use Model\Product;
+
 class ProductController
 {
     public function getCatalog()

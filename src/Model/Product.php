@@ -1,6 +1,5 @@
 <?php
-
-require_once '../Model/Model.php';
+namespace Model;
 class Product extends Model
 {
     public function getById($productId): array|false
